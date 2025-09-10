@@ -1,0 +1,7 @@
+[core]
+    remote = dagshub
+['remote "dagshub"']
+    url = https://dagshub.com/JulesSucrot/MLops_project.dvc
+    auth = basic
+    user = JulesSucrot
+    password = 6521cd5531c1c3d7a782f1c9246bfaf7ada3125f
