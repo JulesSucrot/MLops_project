@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1757540705436
+current_stage: Archived
+description: null
+last_updated_timestamp: 1757540847180
+name: hogwarts_house_classifier
+run_id: bf1cd91ca5d94abcb9576fb3d1f3e053
+run_link: null
+source: file:///C:/Users/sucro/OneDrive/Documents/EFREI/Cours/M1/ML/MLops_project/mlruns/428767871207269159/bf1cd91ca5d94abcb9576fb3d1f3e053/artifacts/model
+status: READY
+status_message: null
+storage_location: file:///C:/Users/sucro/OneDrive/Documents/EFREI/Cours/M1/ML/MLops_project/mlruns/428767871207269159/bf1cd91ca5d94abcb9576fb3d1f3e053/artifacts/model
+user_id: null
+version: 2

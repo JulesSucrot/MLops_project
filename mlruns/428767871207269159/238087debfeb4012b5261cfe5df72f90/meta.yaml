@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/sucro/OneDrive/Documents/EFREI/Cours/M1/ML/MLops_project/mlruns/428767871207269159/238087debfeb4012b5261cfe5df72f90/artifacts
+end_time: 1757540905553
+entry_point_name: ''
+experiment_id: '428767871207269159'
+lifecycle_stage: active
+run_id: 238087debfeb4012b5261cfe5df72f90
+run_name: nosy-asp-92
+run_uuid: 238087debfeb4012b5261cfe5df72f90
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757540900917
+status: 3
+tags: []
+user_id: sucro

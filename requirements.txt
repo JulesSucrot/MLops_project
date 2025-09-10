@@ -3,7 +3,7 @@ uvicorn[standard]
 pandas
 numpy
 scikit-learn
-mlflow
+mlflow==2.9.2
 dvc[http]
 dagshub
 pytest

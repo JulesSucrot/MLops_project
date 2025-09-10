@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/sucro/OneDrive/Documents/EFREI/Cours/M1/ML/MLops_project/mlruns/428767871207269159/8bdaac33e39d4ea28b4d21b5eb9150d0/artifacts
+end_time: 1757540847225
+entry_point_name: ''
+experiment_id: '428767871207269159'
+lifecycle_stage: active
+run_id: 8bdaac33e39d4ea28b4d21b5eb9150d0
+run_name: likeable-tern-904
+run_uuid: 8bdaac33e39d4ea28b4d21b5eb9150d0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757540842317
+status: 3
+tags: []
+user_id: sucro

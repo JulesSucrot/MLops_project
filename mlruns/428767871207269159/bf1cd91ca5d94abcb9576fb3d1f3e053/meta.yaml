@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/sucro/OneDrive/Documents/EFREI/Cours/M1/ML/MLops_project/mlruns/428767871207269159/bf1cd91ca5d94abcb9576fb3d1f3e053/artifacts
+end_time: 1757540705496
+entry_point_name: ''
+experiment_id: '428767871207269159'
+lifecycle_stage: active
+run_id: bf1cd91ca5d94abcb9576fb3d1f3e053
+run_name: bedecked-gnu-627
+run_uuid: bf1cd91ca5d94abcb9576fb3d1f3e053
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757540700885
+status: 3
+tags: []
+user_id: sucro
