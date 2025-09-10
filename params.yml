@@ -1,0 +1,8 @@
+random_state: 42
+n_estimators: 300
+max_depth: 10
+test_size: 0.2
+promote_to_production: true
+model_name: hogwarts_house_classifier
+experiment_name: hogwarts
+data_path: data/harry_potter_1000_students.csv

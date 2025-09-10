@@ -1,0 +1,5 @@
+outs:
+- md5: 599751b4ec9ad3cd173c867c6c2fa0ac
+  size: 38508
+  hash: md5
+  path: harry_potter_1000_students.csv

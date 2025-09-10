@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pandas
+numpy
+scikit-learn
+mlflow
+dvc[http]
+dagshub
+pytest
+httpx
+python-dotenv

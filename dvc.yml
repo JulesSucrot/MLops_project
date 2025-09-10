@@ -1,0 +1,9 @@
+stages:
+  train:
+    cmd: python -m src.train
+    deps:
+      - src/train.py
+      - params.yaml
+      - data/harry_potter_1000_students.csv
+    metrics:
+      - metrics/metrics.json
