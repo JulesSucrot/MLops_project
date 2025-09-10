@@ -1,47 +1,45 @@
-name: ci-cd
+name: CI/CD
+
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/mlops-hogwarts
+    branches: [ "main" ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
-      - run: pip install -r requirements.txt
-      - run: pytest -q
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest tests
 
   build_and_push:
-    needs: test
     runs-on: ubuntu-latest
+    needs: test
     steps:
-      - uses: actions/checkout@v4
-      - name: Login Docker
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v6
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: julessucrot2211/mlops-hogwarts:latest
 
   trigger_webhook:
-    needs: build_and_push
     runs-on: ubuntu-latest
+    needs: build_and_push
     steps:
-      - name: Call webhook
+      - name: Trigger local deploy webhook
         run: |
-          curl -s -X POST "${{ secrets.NGROK_URL }}/deploy" \
-            -H "X-Token: ${{ secrets.WEBHOOK_SECRET }}" \
-            -H "Content-Type: application/json" \
-            -d '{}' || exit 1
+          curl -X POST ${{ secrets.NGROK_URL }}/deploy \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}"
