@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run tests
-        run: pytest tests
+        run: pytest -q
 
   build_and_push:
     runs-on: ubuntu-latest
@@ -41,5 +41,7 @@ jobs:
     steps:
       - name: Trigger local deploy webhook
         run: |
-          curl -X POST ${{ secrets.NGROK_URL }}/deploy \
-            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}"
+          curl -sSf -X POST "${{ secrets.NGROK_URL }}/deploy" \
+            -H "X-Token: ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{}'
