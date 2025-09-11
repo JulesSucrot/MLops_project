@@ -5,14 +5,22 @@ from src.schema import Student
 
 MODEL_URI = os.getenv("MODEL_URI", "models:/hogwarts_house_classifier/Production")
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
+SKIP_MLFLOW = os.getenv("SKIP_MLFLOW") == "1"
 
 app = FastAPI(title="Hogwarts House Predictor")
 
 @app.on_event("startup")
 def _load():
-    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     global model
-    model = mlflow.pyfunc.load_model(MODEL_URI)
+    if SKIP_MLFLOW:
+        class _Dummy:
+            def predict(self, df):
+                return ["Hufflepuff"] * len(df)
+        model = _Dummy()
+    else:
+        if MLFLOW_TRACKING_URI:
+            mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        model = mlflow.pyfunc.load_model(MODEL_URI)
 
 @app.get("/health")
 def health():
