@@ -1,4 +1,3 @@
-# deploy/deployer.py
 import os, subprocess
 from fastapi import FastAPI, Header, HTTPException
 
@@ -9,5 +8,7 @@ app = FastAPI(title="Local Deployer")
 def deploy(x_token: str = Header(None)):
     if x_token != SECRET:
         raise HTTPException(status_code=403, detail="forbidden")
-    subprocess.run(["bash","deploy/deploy.sh"], check=True)
+    # exécuter le script PowerShell
+    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "deploy/deploy.ps1"]
+    subprocess.run(cmd, check=True)
     return {"status":"ok"}
