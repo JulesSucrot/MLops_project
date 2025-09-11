@@ -24,9 +24,9 @@ jobs:
       - name: Configure DVC auth (local) + pull data
         run: |
           dvc remote list
-          dvc remote modify --local origin auth basic
-          dvc remote modify --local origin user "$DAGSHUB_USER"
-          dvc remote modify --local origin password "$DAGSHUB_TOKEN"
+          dvc remote modify --local dagshub auth basic
+          dvc remote modify --local dagshub user "$DAGSHUB_USER"
+          dvc remote modify --local dagshub password "$DAGSHUB_TOKEN"
           dvc pull -v
       - name: Sanity check data
         run: |
