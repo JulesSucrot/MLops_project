@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="Hogwarts House Predictor")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # local file:// ou http://localhost
+    allow_origins=["*"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -16,7 +16,7 @@ app.add_middleware(
 
 MODEL_URI = os.getenv("MODEL_URI", "models:/hogwarts_house_classifier/Production")
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
-SKIP_MLFLOW = os.getenv("SKIP_MLFLOW") == "1"
+
 
 
 @app.on_event("startup")
