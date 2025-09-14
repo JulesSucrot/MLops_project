@@ -18,7 +18,6 @@ MODEL_URI = os.getenv("MODEL_URI", "models:/hogwarts_house_classifier/Production
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 SKIP_MLFLOW = os.getenv("SKIP_MLFLOW") == "1"
 
-app = FastAPI(title="Hogwarts House Predictor")
 
 @app.on_event("startup")
 def _load():
