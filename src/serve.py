@@ -18,7 +18,6 @@ MODEL_URI = os.getenv("MODEL_URI", "models:/hogwarts_house_classifier/Production
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 
 
-
 @app.on_event("startup")
 def _load():
     global model
