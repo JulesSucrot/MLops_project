@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Choixpeau ML – Détermine ta maison</title>
+  <style>
+    :root{--bg:#0b1020;--card:#121a33;--ink:#e9eefc;--muted:#9bb0da;--accent:#6ea8fe}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:linear-gradient(180deg,#0b1020,#111a32 40%,#0b1020);color:var(--ink)}
+    .wrap{max-width:980px;margin:auto;padding:24px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    h1{margin:0 0 6px;font-weight:700;letter-spacing:.3px} h2{margin:22px 0 10px;font-size:18px;color:var(--muted)}
+    .row{display:grid;grid-template-columns:1fr 180px;gap:16px;align-items:center;margin:12px 0}
+    .row label{font-weight:600}
+    input[type=range]{width:100%}
+    .small{font-size:12px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .btn{background:var(--accent);color:#0b1020;border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#0b1329;border:1px solid rgba(255,255,255,.08);color:var(--muted);font-size:13px}
+    .result{font-size:22px;font-weight:800}
+    .footer{margin-top:24px;color:var(--muted);font-size:12px}
+    select, input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0b1329;color:var(--ink)}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;background:#0a1226;border:1px solid rgba(255,255,255,.12);padding:2px 6px;border-radius:6px;color:#b9c7ee}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Choixpeau ML 🧙‍♂️</h1>
+      <div class="small">Réponds avec une note de 1 à 10 pour chaque trait. Le modèle prédira ta maison.</div>
+
+      <h2>Configuration API</h2>
+      <div class="grid">
+        <div>
+          <label for="apiUrl">Lien de l'API</label>
+          <input id="apiUrl" type="text" placeholder="http://127.0.0.1:8000" />
+        </div>
+        <div>
+          <label for="blood">Blood Status</label>
+          <select id="blood">
+            <option>Pure-blood</option>
+            <option selected>Half-blood</option>
+            <option>Muggle-born</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Traits (1 → 10)</h2>
+      <div id="sliders"></div>
+
+      <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+        <button id="predictBtn" class="btn">Prédire la maison</button>
+        <span id="status" class="pill">Prêt</span>
+      </div>
+
+      <div id="output" style="margin-top:18px" class="result"></div>
+
+    </div>
+  </div>
+
+  <script>
+    const TRAITS = [
+      "Bravery","Intelligence","Loyalty","Ambition",
+      "Dark Arts Knowledge","Quidditch Skills","Dueling Skills","Creativity"
+    ];
+
+    const slidersDiv = document.getElementById('sliders');
+    slidersDiv.innerHTML = TRAITS.map(t => `
+      <div class="row">
+        <label for="${t}">${t}</label>
+        <input id="${t}" type="range" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value">
+        <span class="pill">5</span>
+      </div>
+    `).join('');
+
+    const apiUrlInput = document.getElementById('apiUrl');
+    apiUrlInput.value = localStorage.getItem('apiUrl') || 'http://127.0.0.1:8000';
+    apiUrlInput.addEventListener('change', ()=> localStorage.setItem('apiUrl', apiUrlInput.value.trim()));
+
+    function payload(){
+      const blood = document.getElementById('blood').value;
+      const body = {"Blood Status": blood};
+      TRAITS.forEach(t => body[t] = Number(document.getElementById(t).value));
+      return body;
+    }
+
+    async function predict(){
+      const btn = document.getElementById('predictBtn');
+      const status = document.getElementById('status');
+      const out = document.getElementById('output');
+      out.textContent = '';
+
+      const base = apiUrlInput.value.trim().replace(/\/$/, '');
+      if(!base){ alert("Renseigne l'URL de l'API."); return; }
+
+      const url = base + '/predict';
+      const body = payload();
+      btn.disabled = true; status.textContent = 'Appel en cours…';
+      try{
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if(!res.ok){
+          const txt = await res.text();
+          throw new Error('HTTP '+res.status+' – '+txt);
+        }
+        const data = await res.json();
+        out.textContent = '🏠 Maison prédite : ' + (data.house || 'Inconnue');
+        status.textContent = 'Succès';
+      }catch(err){
+        status.textContent = 'Erreur';
+        out.textContent = 'Erreur: ' + err.message;
+      }finally{
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('predictBtn').addEventListener('click', predict);
+  </script>
+</body>
+</html>
