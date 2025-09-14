@@ -1,14 +1,18 @@
 import os, subprocess
 from fastapi import FastAPI, Header, HTTPException
 
-SECRET = os.getenv("WEBHOOK_SECRET","change-me")
-app = FastAPI(title="Local Deployer")
+app = FastAPI()
+SECRET = os.getenv("WEBHOOK_SECRET", "")
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 @app.post("/deploy")
-def deploy(x_token: str = Header(None)):
+def deploy(x_token: str = Header(default="")):
     if x_token != SECRET:
         raise HTTPException(status_code=403, detail="forbidden")
-    # exécuter le script PowerShell
-    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "deploy/deploy.ps1"]
+    # Lance le script PowerShell
+    cmd = ["powershell","-NoProfile","-ExecutionPolicy","Bypass","-File","deploy/deploy.ps1"]
     subprocess.run(cmd, check=True)
-    return {"status":"ok"}
+    return {"status":"deploying"}
