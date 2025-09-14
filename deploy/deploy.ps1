@@ -1,4 +1,5 @@
 $ErrorActionPreference = "Stop"
+Write-Host "IMAGE=$env:DOCKER_IMAGE MODEL_URI=$env:MODEL_URI TRACKING_URI=$env:MLFLOW_TRACKING_URI"
 
 # Lire depuis l'env
 $IMAGE = $env:DOCKER_IMAGE
