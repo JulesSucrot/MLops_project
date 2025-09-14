@@ -1,24 +1,27 @@
+# deploy/deploy.ps1
 $ErrorActionPreference = "Stop"
-Write-Host "IMAGE=$env:DOCKER_IMAGE MODEL_URI=$env:MODEL_URI TRACKING_URI=$env:MLFLOW_TRACKING_URI"
 
-# Lire depuis l'env
-$IMAGE = $env:DOCKER_IMAGE
-if (-not $IMAGE) { throw "DOCKER_IMAGE non défini" }
+$IMAGE   = $env:IMAGE
+$MODEL   = $env:MODEL_URI
+$TRACK   = $env:TRACKING_URI
+$USER    = $env:MLFLOW_TRACKING_USERNAME
+$PASS    = $env:MLFLOW_TRACKING_PASSWORD
 
-# Facultatif: logs
+if (-not $IMAGE) { throw "DOCKER_IMAGE non défini (env IMAGE)" }
+
 Write-Host "Deploy image = $IMAGE"
 
-# Pull
+# Arrêt/suppression sans planter si absent
+docker rm -f hogwarts 2>$null | Out-Null
+
+# Pull (optionnel, mais utile en CI)
 docker pull $IMAGE
 
-# Stop / remove si déjà lancé
-docker stop hogwarts 2>$null | Out-Null
-docker rm hogwarts 2>$null   | Out-Null
-
-# Run
-docker run -d --rm --name hogwarts -p 8000:8000 `
-  -e MLFLOW_TRACKING_URI=$env:MLFLOW_TRACKING_URI `
-  -e MLFLOW_TRACKING_USERNAME=$env:MLFLOW_TRACKING_USERNAME `
-  -e MLFLOW_TRACKING_PASSWORD=$env:MLFLOW_TRACKING_PASSWORD `
-  -e MODEL_URI=$env:MODEL_URI `
+# (Re)démarrage
+docker run -d --rm --name hogwarts `
+  -p 8000:8000 `
+  -e MODEL_URI="$MODEL" `
+  -e MLFLOW_TRACKING_URI="$TRACK" `
+  -e MLFLOW_TRACKING_USERNAME="$USER" `
+  -e MLFLOW_TRACKING_PASSWORD="$PASS" `
   $IMAGE
